@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>BusMate — Never Miss Your Bus</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --red: #ff3150;
+    --red2: #e51f3f;
+    --black: #07080c;
+    --dark: #0d1016;
+    --card: #141820;
+    --border: rgba(255,255,255,.08);
+    --text: #f7f7f8;
+    --muted: #8d93a0;
+    --green: #38d996;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: var(--black);
+    color: var(--text);
+    font-family: Arial, Helvetica, sans-serif;
+    overflow-x: hidden;
+}
+
+/* ================= NAVBAR ================= */
+
+.navbar {
+    height: 76px;
+    padding: 0 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(7,8,12,.88);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--border);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 22px;
+    font-weight: 900;
+}
+
+.logo-box {
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    background: var(--red);
+    border-radius: 11px;
+    box-shadow: 0 0 30px rgba(255,49,80,.3);
+}
+
+.nav-links {
+    display: flex;
+    gap: 30px;
+    list-style: none;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #9ca1ad;
+    font-size: 13px;
+}
+
+.nav-links a:hover {
+    color: white;
+}
+
+.nav-button {
+    text-decoration: none;
+    color: white;
+    border: 1px solid var(--border);
+    padding: 11px 17px;
+    border-radius: 9px;
+    font-size: 12px;
+}
+
+/* ================= HERO ================= */
+
+.hero {
+    min-height: 700px;
+    padding: 100px 7%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 75% 45%,
+            rgba(255,49,80,.18),
+            transparent 32%
+        );
+}
+
+.hero-grid {
+    position: absolute;
+    inset: 0;
+
+    background-image:
+        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+
+    background-size: 50px 50px;
+
+    opacity: .5;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 5;
+    max-width: 680px;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 8px 13px;
+
+    color: #ff6c80;
+    background: rgba(255,49,80,.09);
+    border: 1px solid rgba(255,49,80,.25);
+
+    border-radius: 50px;
+
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1px;
+
+    margin-bottom: 25px;
+}
+
+.badge-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--red);
+    box-shadow: 0 0 12px var(--red);
+}
+
+.hero h1 {
+    font-size: clamp(55px, 8vw, 92px);
+    line-height: .91;
+    letter-spacing: -6px;
+    margin-bottom: 28px;
+}
+
+.hero h1 span {
+    color: var(--red);
+}
+
+.hero-text {
+    max-width: 570px;
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.75;
+    margin-bottom: 32px;
+}
+
+.buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.primary {
+    background: var(--red);
+    color: white;
+    text-decoration: none;
+    padding: 15px 22px;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: bold;
+    box-shadow: 0 15px 40px rgba(255,49,80,.2);
+}
+
+.secondary {
+    background: rgba(255,255,255,.04);
+    border: 1px solid var(--border);
+    color: white;
+    text-decoration: none;
+    padding: 15px 22px;
+    border-radius: 9px;
+    font-size: 13px;
+}
+
+/* ================= HERO BUS ================= */
+
+.hero-bus {
+    position: absolute;
+    right: 9%;
+    top: 42%;
+    font-size: 100px;
+    filter: drop-shadow(0 20px 35px rgba(255,49,80,.3));
+    animation: heroBus 5s ease-in-out infinite alternate;
+}
+
+@keyframes heroBus {
+    from {
+        transform: translateX(-20px) rotate(-2deg);
+    }
+
+    to {
+        transform: translateX(45px) rotate(2deg);
+    }
+}
+
+/* ================= STATS ================= */
+
+.stats {
+    position: absolute;
+    bottom: 35px;
+    left: 7%;
+    display: flex;
+    gap: 45px;
+}
+
+.stat strong {
+    font-size: 25px;
+    display: block;
+}
+
+.stat span {
+    color: #666c78;
+    font-size: 9px;
+    letter-spacing: 1px;
+}
+
+/* ================= SECTION ================= */
+
+.section {
+    padding: 110px 7%;
+}
+
+.section-label {
+    color: var(--red);
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.section-title {
+    font-size: clamp(38px, 5vw, 60px);
+    letter-spacing: -3px;
+    margin: 14px 0 18px;
+}
+
+.section-title span {
+    color: var(--red);
+}
+
+.section-description {
+    color: var(--muted);
+    max-width: 620px;
+    line-height: 1.7;
+    font-size: 14px;
+}
+
+/* ================= PROBLEMS ================= */
+
+.problem-grid {
+    margin-top: 50px;
+
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 16px;
+}
+
+.problem {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 27px;
+    transition: .25s;
+}
+
+.problem:hover {
+    transform: translateY(-5px);
+    border-color: rgba(255,49,80,.3);
+}
+
+.problem-icon {
+    width: 45px;
+    height: 45px;
+    display: grid;
+    place-items: center;
+
+    border-radius: 11px;
+    background: rgba(255,49,80,.1);
+
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.problem h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.problem p {
+    color: #777d89;
+    line-height: 1.6;
+    font-size: 12px;
+}
+
+/* ================= BUS MAP ================= */
+
+.network {
+    padding: 110px 7%;
+    background: #0b0d12;
+}
+
+.map {
+    height: 570px;
+    margin-top: 45px;
+
+    position: relative;
+    overflow: hidden;
+
+    border-radius: 24px;
+    border: 1px solid var(--border);
+
+    background:
+        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px),
+        #11141b;
+
+    background-size: 45px 45px;
+}
+
+/* roads */
+
+.road {
+    position: absolute;
+    height: 30px;
+    width: 120%;
+    left: -10%;
+    background: #1d222c;
+    border-top: 2px solid #292f3a;
+    border-bottom: 2px solid #292f3a;
+}
+
+.r1 {
+    top: 45%;
+    transform: rotate(-18deg);
+}
+
+.r2 {
+    top: 48%;
+    transform: rotate(25deg);
+}
+
+.r3 {
+    top: 35%;
+    transform: rotate(55deg);
+}
+
+.r4 {
+    top: 58%;
+    transform: rotate(-50deg);
+}
+
+.r5 {
+    top: 25%;
+    transform: rotate(-5deg);
+}
+
+/* routes */
+
+.route {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.route path {
+    fill: none;
+    stroke: var(--red);
+    stroke-width: 3;
+    stroke-dasharray: 9 9;
+    opacity: .45;
+}
+
+/* college */
+
+.campus {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%,-50%);
+
+    width: 115px;
+    height: 115px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #151922;
+    border: 3px solid var(--red);
+
+    box-shadow:
+        0 0 0 12px rgba(255,49,80,.08),
+        0 0 50px rgba(255,49,80,.3);
+
+    z-index: 10;
+}
+
+.campus-icon {
+    font-size: 27px;
+}
+
+.campus b {
+    font-size: 10px;
+    margin-top: 5px;
+}
+
+.campus small {
+    color: #777d89;
+    font-size: 8px;
+}
+
+/* buses */
+
+.bus {
+    position: absolute;
+
+    width: 46px;
+    height: 46px;
+
+    display: grid;
+    place-items: center;
+
+    background: var(--red);
+
+    border-radius: 12px;
+
+    font-size: 22px;
+
+    z-index: 20;
+
+    box-shadow:
+        0 0 0 6px rgba(255,49,80,.1),
+        0 10px 30px rgba(0,0,0,.4);
+
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-timing-function: ease-in-out;
+}
+
+.bus label {
+    position: absolute;
+    top: 50px;
+
+    white-space: nowrap;
+
+    background: #090b10;
+    border: 1px solid var(--border);
+
+    color: #bfc3cc;
+
+    padding: 5px 7px;
+    border-radius: 5px;
+
+    font-size: 8px;
+    font-weight: bold;
+}
+
+/* positions */
+
+.bus1 { left: 10%; top: 15%; animation-name: b1; }
+.bus2 { right: 10%; top: 14%; animation-name: b2; }
+.bus3 { left: 8%; bottom: 15%; animation-name: b3; }
+.bus4 { right: 9%; bottom: 13%; animation-name: b4; }
+
+.bus5 { left: 31%; top: 4%; animation-name: b5; }
+.bus6 { left: 62%; top: 5%; animation-name: b6; }
+
+.bus7 { left: 3%; top: 47%; animation-name: b7; }
+.bus8 { right: 3%; top: 47%; animation-name: b8; }
+
+.bus9 { left: 27%; bottom: 3%; animation-name: b9; }
+.bus10 { left: 67%; bottom: 3%; animation-name: b10; }
+
+@keyframes b1 {
+    to { transform: translate(35px,30px); }
+}
+
+@keyframes b2 {
+    to { transform: translate(-35px,30px); }
+}
+
+@keyframes b3 {
+    to { transform: translate(35px,-30px); }
+}
+
+@keyframes b4 {
+    to { transform: translate(-35px,-30px); }
+}
+
+@keyframes b5 {
+    to { transform: translate(25px,35px); }
+}
+
+@keyframes b6 {
+    to { transform: translate(-25px,35px); }
+}
+
+@keyframes b7 {
+    to { transform: translate(50px,-5px); }
+}
+
+@keyframes b8 {
+    to { transform: translate(-50px,5px); }
+}
+
+@keyframes b9 {
+    to { transform: translate(30px,-35px); }
+}
+
+@keyframes b10 {
+    to { transform: translate(-30px,-35px); }
+}
+
+/* ================= ROUTE CARDS ================= */
+
+.routes {
+    padding: 110px 7%;
+}
+
+.route-grid {
+    margin-top: 45px;
+
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 14px;
+}
+
+.route-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 22px;
+    border-radius: 15px;
+}
+
+.route-card:hover {
+    border-color: rgba(255,49,80,.3);
+}
+
+.route-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 17px;
+}
+
+.route-id {
+    width: 37px;
+    height: 37px;
+
+    display: grid;
+    place-items: center;
+
+    color: var(--red);
+    background: rgba(255,49,80,.1);
+    border-radius: 9px;
+
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.preview {
+    color: #686e7a;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 5px 7px;
+    font-size: 8px;
+}
+
+.route-card h3 {
+    font-size: 15px;
+    margin-bottom: 12px;
+}
+
+.route-address {
+    color: #c0c4cc;
+    font-size: 11px;
+    line-height: 2;
+}
+
+.route-address span {
+    color: var(--red);
+}
+
+.route-card p {
+    color: #6e7480;
+    font-size: 10px;
+    margin-top: 10px;
+    line-height: 1.6;
+}
+
+/* ================= LIVE COMING SOON ================= */
+
+.live-section {
+    padding: 130px 7%;
+    text-align: center;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(255,49,80,.17),
+            transparent 42%
+        );
+
+    border-top: 1px solid var(--border);
+}
+
+.live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    color: #ff6378;
+    background: rgba(255,49,80,.1);
+
+    border: 1px solid rgba(255,49,80,.25);
+
+    padding: 8px 13px;
+    border-radius: 50px;
+
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.live-badge i {
+    width: 7px;
+    height: 7px;
+
+    background: var(--red);
+    border-radius: 50%;
+
+    box-shadow: 0 0 15px var(--red);
+
+    animation: blink 1.2s infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: .25;
+    }
+}
+
+.live-section h2 {
+    font-size: clamp(40px,6vw,70px);
+    line-height: .98;
+    letter-spacing: -4px;
+    margin: 25px auto 20px;
+}
+
+.live-section h2 span {
+    color: var(--red);
+}
+
+.live-section p {
+    max-width: 650px;
+    margin: auto;
+
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.live-items {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 35px 0;
+}
+
+.live-item {
+    padding: 17px 25px;
+
+    background: #12151c;
+    border: 1px solid var(--border);
+
+    border-radius: 11px;
+}
+
+.live-item b {
+    display: block;
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+
+.live-item small {
+    color: #686e7a;
+    font-size: 9px;
+}
+
+.linkedin {
+    display: inline-block;
+
+    background: var(--red);
+    color: white;
+
+    text-decoration: none;
+
+    padding: 15px 23px;
+    border-radius: 9px;
+
+    font-size: 12px;
+    font-weight: bold;
+
+    box-shadow: 0 15px 35px rgba(255,49,80,.2);
+}
+
+.note {
+    display: block;
+    color: #555b67;
+    font-size: 9px;
+    margin-top: 13px;
+}
+
+/* ================= FOOTER ================= */
+
+footer {
+    padding: 28px 7%;
+
+    display: flex;
+    justify-content: space-between;
+
+    color: #5d6370;
+
+    border-top: 1px solid var(--border);
+
+    font-size: 10px;
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width: 850px) {
+
+    .nav-links {
+        display: none;
+    }
+
+    .hero {
+        min-height: 800px;
+    }
+
+    .hero-bus {
+        opacity: .18;
+        right: 5%;
+        top: 48%;
+        font-size: 120px;
+    }
+
+    .stats {
+        display: none;
+    }
+
+    .problem-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .route-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .live-items {
+        flex-direction: column;
+    }
+
+    footer {
+        flex-direction: column;
+        gap: 8px;
+    }
+}
+
+@media(max-width: 550px) {
+
+    .navbar {
+        padding: 0 5%;
+    }
+
+    .hero,
+    .section,
+    .network,
+    .routes,
+    .live-section {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+
+    .hero h1 {
+        letter-spacing: -4px;
+    }
+
+    .buttons {
+        flex-direction: column;
+    }
+
+    .primary,
+    .secondary {
+        text-align: center;
+    }
+
+    .map {
+        height: 480px;
+    }
+
+    .bus {
+        transform: scale(.8);
+    }
+
+    .campus {
+        width: 90px;
+        height: 90px;
+    }
+
+    .route-address {
+        font-size: 10px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        <div class="logo-box">🚌</div>
+        BusMate
+    </div>
+
+    <ul class="nav-links">
+        <li><a href="#problem">Problem</a></li>
+        <li><a href="#network">Network</a></li>
+        <li><a href="#routes">Routes</a></li>
+        <li><a href="#live">Live Tracking</a></li>
+    </ul>
+
+    <a href="#live" class="nav-button">
+        Follow Build →
+    </a>
+
+</nav>
+
+
+<!-- ================= HERO ================= -->
+
+<section class="hero">
+
+    <div class="hero-grid"></div>
+
+    <div class="hero-content">
+
+        <div class="badge">
+            <span class="badge-dot"></span>
+            BUILT FOR COLLEGE STUDENTS
+        </div>
+
+        <h1>
+            Never miss<br>
+            your <span>bus.</span>
+        </h1>
+
+        <p class="hero-text">
+            BusMate is a student-focused college bus platform
+            designed to make everyday transportation simpler.
+            Know your route, find your bus and eventually track
+            it live — all in one place.
+        </p>
+
+        <div class="buttons">
+
+            <a href="#network" class="primary">
+                Explore Bus Network →
+            </a>
+
+            <a href="#live" class="secondary">
+                What's Coming?
+            </a>
+
+        </div>
+
+    </div>
+
+    <div class="hero-bus">
+        🚌
+    </div>
+
+    <div class="stats">
+
+        <div class="stat">
+            <strong>10</strong>
+            <span>COLLEGE BUSES</span>
+        </div>
+
+        <div class="stat">
+            <strong>10</strong>
+            <span>ROUGH ROUTES</span>
+        </div>
+
+        <div class="stat">
+            <strong>1</strong>
+            <span>BUSMATE PLATFORM</span>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= PROBLEM ================= -->
+
+<section class="section" id="problem">
+
+    <span class="section-label">
+        THE PROBLEM
+    </span>
+
+    <h2 class="section-title">
+        College transport<br>
+        shouldn't feel <span>uncertain.</span>
+    </h2>
+
+    <p class="section-description">
+        Students often don't know where their bus is, whether it
+        has already passed their stop or how long they need to wait.
+        Parents can also be left without clear information.
+    </p>
+
+
+    <div class="problem-grid">
+
+        <div class="problem">
+
+            <div class="problem-icon">⏱️</div>
+
+            <h3>
+                Waiting without knowing
+            </h3>
+
+            <p>
+                Students shouldn't have to stand outside
+                wondering when the bus will arrive.
+            </p>
+
+        </div>
+
+
+        <div class="problem">
+
+            <div class="problem-icon">🚌</div>
+
+            <h3>
+                Where is my bus?
+            </h3>
+
+            <p>
+                BusMate is designed around a simple idea:
+                make the bus location easy to understand.
+            </p>
+
+        </div>
+
+
+        <div class="problem">
+
+            <div class="problem-icon">🔔</div>
+
+            <h3>
+                Better communication
+            </h3>
+
+            <p>
+                Future alerts can keep students and parents
+                informed about bus movement and status.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= BUS NETWORK ================= -->
+
+<section class="network" id="network">
+
+    <span class="section-label">
+        COLLEGE BUS NETWORK
+    </span>
+
+    <h2 class="section-title">
+        One campus.<br>
+        <span>10 moving buses.</span>
+    </h2>
+
+    <p class="section-description">
+        This is a rough visual representation of the college
+        transportation network. The buses and routes shown here
+        are only a prototype — live GPS will come later.
+    </p>
+
+
+    <div class="map">
+
+        <!-- Roads -->
+
+        <div class="road r1"></div>
+        <div class="road r2"></div>
+        <div class="road r3"></div>
+        <div class="road r4"></div>
+        <div class="road r5"></div>
+
+
+        <!-- Route Lines -->
+
+        <svg class="route" viewBox="0 0 800 570">
+
+            <path d="M400 285 C300 220 170 130 50 80"/>
+            <path d="M400 285 C520 200 650 130 760 70"/>
+            <path d="M400 285 C280 330 130 400 40 500"/>
+            <path d="M400 285 C530 330 670 410 760 500"/>
+
+            <path d="M400 285 C350 190 320 90 280 15"/>
+            <path d="M400 285 C470 180 510 90 540 15"/>
+
+            <path d="M400 285 C270 285 120 285 10 285"/>
+            <path d="M400 285 C530 285 670 285 790 285"/>
+
+            <path d="M400 285 C330 370 310 470 280 560"/>
+            <path d="M400 285 C470 370 510 470 570 560"/>
+
+        </svg>
+
+
+        <!-- Campus -->
+
+        <div class="campus">
+
+            <div class="campus-icon">
+                🎓
+            </div>
+
+            <b>COLLEGE</b>
+
+            <small>Main Campus</small>
+
+        </div>
+
+
+        <!-- 10 Buses -->
+
+        <div class="bus bus1">
+            🚌
+            <label>BUS 01</label>
+        </div>
+
+        <div class="bus bus2">
+            🚌
+            <label>BUS 02</label>
+        </div>
+
+        <div class="bus bus3">
+            🚌
+            <label>BUS 03</label>
+        </div>
+
+        <div class="bus bus4">
+            🚌
+            <label>BUS 04</label>
+        </div>
+
+        <div class="bus bus5">
+            🚌
+            <label>BUS 05</label>
+        </div>
+
+        <div class="bus bus6">
+            🚌
+            <label>BUS 06</label>
+        </div>
+
+        <div class="bus bus7">
+            🚌
+            <label>BUS 07</label>
+        </div>
+
+        <div class="bus bus8">
+            🚌
+            <label>BUS 08</label>
+        </div>
+
+        <div class="bus bus9">
+            🚌
+            <label>BUS 09</label>
+        </div>
+
+        <div class="bus bus10">
+            🚌
+            <label>BUS 10</label>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= ROUTES ================= -->
+
+<section class="routes" id="routes">
+
+    <span class="section-label">
+        ROUTE DIRECTORY
+    </span>
+
+    <h2 class="section-title">
+        Find your <span>route.</span>
+    </h2>
+
+    <p class="section-description">
+        Rough route addresses for the current landing-page
+        prototype. These can later be replaced with actual
+        college stops and GPS coordinates.
+    </p>
+
+
+    <div class="route-grid">
+
+        <div class="route-card">
+            <div class="route-header">
+                <div class="route-id">A</div>
+                <span class="preview">PREVIEW</span>
+            </div>
+
+            <h3>Bus 01 — North Route</h3>
+
+            <div class="route-address">
+                <span>●</span> Green Park →
+                <span>●</span> City Center →
+                <span>●</span> Main Road →
+                <span>🎓</span> College
+            </div>
+
+            <p>
+                Approx. route: Green Park, City Center,
+                Main Road and College.
+            </p>
+        </div>
+
+
+        <div class="route-card">
+            <div class="route-header">
+                <div class="route-id">B</div>
+                <span class="preview">PREVIEW</span>
+            </div>
+
+            <h3>Bus 02 — East Route</h3>
+
+            <div class="route-address">
+                <span>●</span> Lake Road →
+                <span>●</span> East Colony →
+                <span>●</span> Market Road →
+                <span>🎓</span> College
+            </div>
+
+            <p>
+                Approx. route: Lake Road, East Colony,
+                Market Road and College.
+            </p>
+        </div>
+
+
+        <div class="route-card">
+            <div class="route-header">
+                <div class="route-id">C</div>
+                <span class="preview">PREVIEW</span>
+            </div>
+
+            <h3>Bus 03 — South Route</h3>
+
+            <div class="route-address">
+                <span>●</span> South Avenue →
+                <span>●</span> Station Road →
+                <span>●</span> Main Junction →
+                <span>🎓</span> College
+            </div>
+
+            <p>
+                Approx. route: South Avenue, Station Road,
+                Main Junction and College.
+            </p>
+        </div>
+
+
+        <div class="route-card">
+            <div class="route-header">
+                <div class="route-id">D</div>
+                <span class="preview">PREVIEW</span>
+            </div>
+
+            <h3>Bus 04 — West Route</h3>
+
+            <div class="route-address">
+                <span>●</span> West Park →
+                <span>●</span> Riverside →
+                <span>●</span> Central Road →
+                <span>🎓</span> College
+            </div>
+
+            <p>
+                Approx. route: West Park, Riverside,
+                Central Road and College.
+            </p>
+        </div>
+
+
+        <div class="route-card">
+            <div class="route-header">
+                <div class="route-id">E</div>
+                <span class="preview">PREVIEW</span>
+            </div>
+
+            <h3>Bus 05 — Central Route</h3>
+
+            <div class="route-address">
+                <span>●</span> Main Market →
+                <span>●</span> Central Square →
+                <span>●</span> Bus Stand →
+                <span>🎓</span> College
+            </div>
+
+            <p>
+                Approx. route: Main Market, Central Square,
+                Bus Stand and College.
+            </p>
+        </div>
+
+
+        <div class="route-card">
+            <div class="route-header">
+                <div class="route-id">F</div>
+                <span class="preview">PREVIEW</span>
+            </div>
+
+            <h3>Bus 06 — Highway Route</h3>
+
+            <div class="route-address">
+                <span>●</span> Highway Point →
+                <span>●</span> Industrial Area →
+                <span>●</span> Main Road →
+                <span>🎓</span> College
+            </div>
+
+            <p>
+                Approx. route: Highway Point, Industrial Area,
+                Main Road and College.
+            </p>
+        </div>
+
+
+        <div class="route-card">
+            <div class="route-header">
+                <div class="route-id">G</div>
+                <span class="preview">PREVIEW</span>
+            </div>
+
+            <h3>Bus 07 — Station Route</h3>
+
+            <div class="route-address">
+                <span>●</span> Railway Station →
+                <span>●</span> Town Square →
+                <span>●</span> Main Road →
+                <span>🎓</span> College
+            </div>
+
+            <p>
+                Approx. route: Railway Station, Town Square,
+                Main Road and College.
+            </p>
+        </div>
+
+
+        <div class="route-card">
+            <div class="route-header">
+                <div class="route-id">H</div>
+                <span class="preview">PREVIEW</span>
+            </div>
+
+            <h3>Bus 08 — Riverside Route</h3>
+
+            <div class="route-address">
+                <span>●</span> Riverside →
+                <span>●</span> North Bridge →
+                <span>●</span> City Center →
+                <span>🎓</span> College
+            </div>
+
+            <p>
+                Approx. route: Riverside, North Bridge,
+                City Center and College.
+            </p>
+        </div>
+
+
+        <div class="route-card">
+            <div class="route-header">
+                <div class="route-id">I</div>
+                <span class="preview">PREVIEW</span>
+            </div>
+
+            <h3>Bus 09 — Airport Route</h3>
+
+            <div class="route-address">
+                <span>●</span> Airport Road →
+                <span>●</span> Ring Road →
+                <span>●</span> Central Avenue →
+                <span>🎓</span> College
+            </div>
+
+            <p>
+                Approx. route: Airport Road, Ring Road,
+                Central Avenue and College.
+            </p>
+        </div>
+
+
+        <div class="route-card">
+            <div class="route-header">
+                <div class="route-id">J</div>
+                <span class="preview">PREVIEW</span>
+            </div>
+
+            <h3>Bus 10 — South Colony</h3>
+
+            <div class="route-address">
+                <span>●</span> South Colony →
+                <span>●</span> City Hospital →
+                <span>●</span> Central Road →
+                <span>🎓</span> College
+            </div>
+
+            <p>
+                Approx. route: South Colony, City Hospital,
+                Central Road and College.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= LIVE TRACKING ================= -->
+
+<section class="live-section" id="live">
+
+    <div class="live-badge">
+        <i></i>
+        LIVE TRACKING
+    </div>
+
+    <h2>
+        Real-time tracking<br>
+        is <span>coming soon.</span>
+    </h2>
+
+    <p>
+        BusMate is currently a landing-page prototype.
+        The next version will bring live GPS locations,
+        moving buses, ETA updates and route notifications.
+    </p>
+
+
+    <div class="live-items">
+
+        <div class="live-item">
+            <b>📍 GPS Tracking</b>
+            <small>Real-time bus location</small>
+        </div>
+
+        <div class="live-item">
+            <b>🚌 10 Buses</b>
+            <small>Live route visibility</small>
+        </div>
+
+        <div class="live-item">
+            <b>🔔 Smart Alerts</b>
+            <small>Bus arrival updates</small>
+        </div>
+
+    </div>
+
+
+    <!-- ADD YOUR LINKEDIN URL HERE -->
+
+    <a
+        href="YOUR_LINKEDIN_LIVE_LINK"
+        target="_blank"
+        class="linkedin"
+    >
+        🔴 Watch BusMate Live Development →
+    </a>
+
+    <span class="note">
+        Follow the development and see what we're building.
+    </span>
+
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <div>
+        © 2026 BusMate
+    </div>
+
+    <div>
+        Built by students, for students.
+    </div>
+
+</footer>
+
+</body>
+</html>
