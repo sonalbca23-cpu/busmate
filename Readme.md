@@ -160,37 +160,19 @@ index.html
 
 in your web browser.
 
-Alternatively, you can use a local development server such as VS Code Live Server.
-
-🔗 Adding Your LinkedIn Link
-
-The current project contains a placeholder LinkedIn URL:
-
-<a
-    href="YOUR_LINKEDIN_LIVE_LINK"
-    target="_blank"
-    class="linkedin"
->
+Alternatively, you can use a local 
     🔴 Watch BusMate Live Development →
 </a>
 
 
-Replace:
 
-YOUR_LINKEDIN_LIVE_LINK
+
+
 
 
 with your actual LinkedIn post, profile, or development update URL.
 
-For example:
 
-<a
-    href="https://www.linkedin.com/in/your-profile/"
-    target="_blank"
-    class="linkedin"
->
-    🔴 Watch BusMate Live Development →
-</a>
 
 📱 Responsive Design
 
